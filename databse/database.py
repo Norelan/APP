@@ -1,21 +1,7 @@
 import sqlite3 as sl
 
-# conn = sl.connect('wish.db')
-# cursor = conn.cursor()
-
-# # Создание пользователя с user_id = 1000
-# cursor.execute("INSERT OR IGNORE INTO 'users' ('user_id') VALUES(?)", (1000,))
-# # считываю всех пользователей
-# users = cursor.execute("SELECT * FROM 'users'")
-# print(users.fetchall())
-
-# # подтверждаем изменения
-# conn.commit()
-
 class DB:
-
     def __init__(self, db_file):
-        """ Инициализация соединений с БД"""
         self.conn = sl.connect(db_file)
         self.cursor = self.conn.cursor()
 
@@ -41,6 +27,20 @@ class DB:
     def get_wishlist(self, user_id):
         result = self.cursor.execute("SELECT * FROM wishes WHERE users_id = ?", (self.get_id(user_id)))
         return result.fetchall()
+    
+    def wish_owner(self, wish_id):
+        result = self.cursor.execute("SELECT users_id FROM wishes WHERE id = ?", (wish_id,))
+        return result.fetchall()[0]
+    
+    def update_wish_text(self, new_text, wish_id):
+        self.cursor.execute("UPDATE wishes SET wish_text = ? WHERE id = ? ", (new_text, wish_id))
+
+    def update_wish_url(self, new_url, wish_id):
+        self.cursor.execute("UPDATE wishes SET wish_url = ? WHERE id = ?", (new_url, wish_id))
+
+
+    def delete_wish(self, wish_id):
+        self.cursor.execute("DELETE FROM wishes WHERE id = ?", (wish_id,))
 
     def close(self):
         self.conn.close()

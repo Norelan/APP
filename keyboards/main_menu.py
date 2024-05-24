@@ -11,6 +11,10 @@ async def set_main_menu(bot: Bot):
                    description='Добавить новое желание'),
         BotCommand(command='/watch',
                    description='Посмотреть вишлист'),
+        BotCommand(command='/delete',
+                   description='Удалить желание'),
+        BotCommand(command='/upd_name',
+                   description='Изменить желание'),
 
                    
         # BotCommand(command='/help',
