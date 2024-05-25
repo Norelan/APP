@@ -28,21 +28,25 @@ class DB:
         result = self.cursor.execute("SELECT * FROM wishes WHERE users_id = ?", (self.get_id(user_id)))
         return result.fetchall()
     
+    def get_wish(self, wish_id):
+        result = self.cursor.execute("SELECT * FROM wishes WHERE id = ?", (wish_id,))
+        return result.fetchall()
+    
     def wish_owner(self, wish_id):
         result = self.cursor.execute("SELECT users_id FROM wishes WHERE id = ?", (wish_id,))
         return result.fetchall()[0]
     
     def update_wish_text(self, new_text, wish_id):
         self.cursor.execute("UPDATE wishes SET wish_text = ? WHERE id = ? ", (new_text, wish_id))
-
+        return self.conn.commit()
     def update_wish_url(self, new_url, wish_id):
         self.cursor.execute("UPDATE wishes SET wish_url = ? WHERE id = ?", (new_url, wish_id))
-
+        return self.conn.commit()
 
     def delete_wish(self, wish_id):
         self.cursor.execute("DELETE FROM wishes WHERE id = ?", (wish_id,))
-
+        return self.conn.commit()
+    
     def close(self):
         self.conn.close()
 
-BotDB = DB('wish.db')
